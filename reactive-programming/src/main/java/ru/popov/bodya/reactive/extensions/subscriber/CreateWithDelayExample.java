@@ -4,23 +4,32 @@ package ru.popov.bodya.reactive.extensions.subscriber;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
-import rx.Subscriber;
-import rx.functions.Action0;
-import rx.functions.Action1;
+import rx.Subscription;
 import rx.subscriptions.Subscriptions;
 
 public class CreateWithDelayExample {
-
 
     public static void main(String[] args) {
         Observable<Integer> bigDelayObservable = delayed(3, 10);
         Observable<Integer> smallDelayObservable = delayed(4, 3);
 
-        bigDelayObservable.subscribe(integer ->
-                System.out.println("bigDelay on: " + Thread.currentThread() + " with value: " + integer));
+        Subscription bigDelaySubscription = bigDelayObservable.subscribe(integer ->
+                System.out.println("bigDelay on: " + Thread.currentThread().getName() + " with value: " + integer));
 
         smallDelayObservable.subscribe(integer ->
-                System.out.println("smallDelay on: " + Thread.currentThread() + " with value: " + integer));
+                System.out.println("smallDelay on: " + Thread.currentThread().getName() + " with value: " + integer));
+
+        new Thread(() -> {
+            try {
+                TimeUnit.SECONDS.sleep(5);
+                bigDelaySubscription.unsubscribe();
+            } catch (InterruptedException ignored) {
+                // ignored
+            }
+        }).start();
+
+
+        System.out.println("finish on: " + Thread.currentThread().getName());
     }
 
     private static <T> Observable<T> delayed(final T x, final int timeout) {
@@ -30,6 +39,8 @@ public class CreateWithDelayExample {
                 if (!subscriber.isUnsubscribed()) {
                     subscriber.onNext(x);
                     subscriber.onCompleted();
+                } else {
+                    System.out.println("subscriber unSubscribed on: " + Thread.currentThread().getName());
                 }
             };
             final Thread thread = new Thread(r);
@@ -41,7 +52,7 @@ public class CreateWithDelayExample {
     private static void sleep(int timeout, TimeUnit timeUnit) {
         try {
             timeUnit.sleep(timeout);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             // ignored
         }
     }
