@@ -7,21 +7,17 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Observable<String> first = Observable.create(subscriber -> {
-            new Thread(() -> {
-                System.out.println("first create on thread: " + Thread.currentThread().getName());
-                subscriberEvents(subscriber);
-            }).start();
-        });
+        Observable<String> first = Observable.unsafeCreate(subscriber -> new Thread(() -> {
+            System.out.println("first create on thread: " + Thread.currentThread().getName());
+            subscriberEvents(subscriber);
+        }).start());
 
-        Observable<String> second = Observable.create(subscriber -> {
-            new Thread(() -> {
-                System.out.println("second create on thread: " + Thread.currentThread().getName());
-                subscriberEvents(subscriber);
-            }).start();
-        });
+        Observable<String> second = Observable.unsafeCreate(subscriber -> new Thread(() -> {
+            System.out.println("second create on thread: " + Thread.currentThread().getName());
+            subscriberEvents(subscriber);
+        }).start());
 
-        Observable<String> third = Observable.create(subscriber -> new Thread(() -> {
+        Observable<String> third = Observable.unsafeCreate(subscriber -> new Thread(() -> {
             System.out.println("third create on thread: " + Thread.currentThread().getName());
             subscriberEvents(subscriber);
         }).start());
@@ -38,9 +34,9 @@ public class Main {
         for (int i = 0; i < 5; i++) {
             subscriber.onNext("onNext" + i);
             try {
-                    Thread.sleep(1000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                // do nothing
             }
         }
         subscriber.onCompleted();
