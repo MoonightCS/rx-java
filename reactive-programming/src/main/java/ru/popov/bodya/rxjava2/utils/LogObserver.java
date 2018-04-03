@@ -1,8 +1,8 @@
-package ru.popov.bodya.rxjava2;
+package ru.popov.bodya.rxjava2.utils;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
-import ru.popov.bodya.utils.Logger;
+import ru.popov.bodya.reactive.extensions.utils.Logger;
 
 public class LogObserver<T> implements Observer<T> {
 

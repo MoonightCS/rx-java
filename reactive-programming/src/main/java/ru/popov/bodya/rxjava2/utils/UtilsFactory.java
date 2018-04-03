@@ -1,6 +1,6 @@
-package ru.popov.bodya.rxjava2;
+package ru.popov.bodya.rxjava2.utils;
 
-public class LogObserverFactory {
+public class UtilsFactory {
 
     public static <T> LogObserver<? super T> createObserver() {
         return new LogObserver<>();

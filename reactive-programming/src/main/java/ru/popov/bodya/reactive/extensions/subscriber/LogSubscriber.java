@@ -1,6 +1,6 @@
 package ru.popov.bodya.reactive.extensions.subscriber;
 
-import ru.popov.bodya.utils.Logger;
+import ru.popov.bodya.reactive.extensions.utils.Logger;
 import rx.Subscriber;
 
 public class LogSubscriber<T> extends Subscriber<T> {
