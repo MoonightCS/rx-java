@@ -11,9 +11,9 @@ public class BasicCreationExample {
 
     public static void main(String[] args) {
 
-        Observable<String> first = Observable.create(e -> new Thread(() -> {
+        Observable<String> first = Observable.create(observableEmitter -> new Thread(() -> {
             Logger.log("onSubscribe first action");
-            subscriberEvents(e);
+            subscriberEvents(observableEmitter);
         }).start());
 
         Observable<String> second = Observable.create(e -> new Thread(() -> {
@@ -23,6 +23,7 @@ public class BasicCreationExample {
 
         Observable
                 .merge(first, second)
+                .doOnNext(s -> Logger.log("doOnNext before merge: " + s))
                 .filter(s -> s.matches(".*onNext[0-4].*"))
                 .forEach(s -> Logger.log("onNext on merge: " + s));
 
