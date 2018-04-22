@@ -1,4 +1,4 @@
-package ru.popov.bodya.rxjava2.operators;
+package ru.popov.bodya.rxjava2.operators.flatmap;
 
 import io.reactivex.Observable;
 
