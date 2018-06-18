@@ -1,4 +1,4 @@
-package ru.popov.bodya.utils;
+package ru.popov.bodya.reactive.extensions.utils;
 
 public class Logger {
 

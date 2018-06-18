@@ -1,17 +1,25 @@
 package ru.popov.bodya.reactive.extensions.subscriber;
 
-import ru.popov.bodya.utils.Logger;
-import rx.Subscriber;
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 
-public class LogSubscriber<T> extends Subscriber<T> {
-    @Override
-    public void onCompleted() {
-        Logger.log("onCompleted");
-    }
+import ru.popov.bodya.reactive.extensions.utils.Logger;
+
+public class LogSubscriber<T> implements Subscriber<T> {
 
     @Override
     public void onError(Throwable e) {
         Logger.log("e");
+    }
+
+    @Override
+    public void onComplete() {
+        Logger.log("onComplete");
+    }
+
+    @Override
+    public void onSubscribe(Subscription s) {
+        Logger.log("onSubscribe");
     }
 
     @Override
