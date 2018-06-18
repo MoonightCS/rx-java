@@ -1,11 +1,11 @@
 package ru.popov.bodya.reactive.extensions.subscriber;
 
 
-import java.util.concurrent.TimeUnit;
-
 import rx.Observable;
 import rx.Subscription;
 import rx.subscriptions.Subscriptions;
+
+import java.util.concurrent.TimeUnit;
 
 public class CreateWithDelayExample {
 
