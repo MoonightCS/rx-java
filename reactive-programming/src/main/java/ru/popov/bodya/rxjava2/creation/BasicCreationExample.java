@@ -1,11 +1,10 @@
 package ru.popov.bodya.rxjava2.creation;
 
-import java.util.concurrent.TimeUnit;
-
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import ru.popov.bodya.reactive.extensions.utils.Logger;
+
+import java.util.concurrent.TimeUnit;
 
 public class BasicCreationExample {
 

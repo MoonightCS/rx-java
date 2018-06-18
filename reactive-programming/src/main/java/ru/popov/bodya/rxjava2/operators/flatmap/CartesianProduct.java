@@ -20,7 +20,6 @@ public class CartesianProduct {
                 .map(ascii -> (char) ascii.intValue())
                 .map(ch -> Character.toString(ch));
 
-
         final Observable<String> cartesianProduct = symbols
                 .flatMap(symbol -> ranks.map(rank -> symbol + rank));
 

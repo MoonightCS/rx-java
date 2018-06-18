@@ -4,13 +4,6 @@ import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.users.FullAccount;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.function.Consumer;
-
 import io.reactivex.Observable;
 import ru.popov.bodya.rxjava2.utils.UtilsFactory;
 

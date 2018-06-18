@@ -7,13 +7,21 @@ import java.util.concurrent.TimeUnit;
 public class Emitter {
 
     public static void main(String[] args) {
-        emitWithInterval(10);
+        emitWithInterval(1);
     }
 
     private static void emitWithInterval(long period) {
+
         Observable
                 .interval(period, TimeUnit.SECONDS)
-                .blockingSubscribe(aLong -> System.out.println("long value: " + aLong + " on thread: " + Thread.currentThread().getName()));
+                .subscribe(aLong -> System.out.println("long value: " + aLong + " on thread: " + Thread.currentThread().getName()));
+
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }
