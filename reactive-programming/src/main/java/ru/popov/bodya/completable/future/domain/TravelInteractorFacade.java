@@ -1,5 +1,6 @@
 package ru.popov.bodya.completable.future.domain;
 
+import io.reactivex.Observable;
 import ru.popov.bodya.completable.future.data.GeoLocation;
 import ru.popov.bodya.completable.future.data.Ticket;
 import ru.popov.bodya.completable.future.data.TravelAgency;
@@ -7,6 +8,7 @@ import ru.popov.bodya.completable.future.data.User;
 import ru.popov.bodya.completable.future.data.repository.UserRepository;
 import ru.popov.bodya.completable.future.domain.interactor.LocationInteractor;
 import ru.popov.bodya.completable.future.domain.interactor.TicketInteractor;
+import ru.popov.bodya.interoperability.CompletableRxAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,19 +16,35 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import static java.util.function.Function.identity;
+import static ru.popov.bodya.reactive.extensions.utils.Logger.log;
 
 public class TravelInteractorFacade {
 
     private final UserRepository mUserRepository;
     private final LocationInteractor mLocationInteractor;
     private final TicketInteractor mTicketInteractor;
+    private final CompletableRxAdapter mCompletableRxAdapter;
 
-    public TravelInteractorFacade(UserRepository mUserRepository,
-                                  LocationInteractor mLocationInteractor,
-                                  TicketInteractor mTicketInteractor) {
-        this.mUserRepository = mUserRepository;
-        this.mLocationInteractor = mLocationInteractor;
-        this.mTicketInteractor = mTicketInteractor;
+    public TravelInteractorFacade(UserRepository userRepository,
+                                  LocationInteractor locationInteractor,
+                                  TicketInteractor ticketInteractor,
+                                  CompletableRxAdapter completableRxAdapter) {
+        mUserRepository = userRepository;
+        mLocationInteractor = locationInteractor;
+        mTicketInteractor = ticketInteractor;
+        mCompletableRxAdapter = completableRxAdapter;
+    }
+
+    public Observable<Ticket> getTicketObservable() {
+        final Observable<TravelAgency> agencies = agencies(4);
+        final Observable<User> user = mUserRepository.rxGetUserById(3);
+        final Observable<GeoLocation> location = mLocationInteractor.rxLocate();
+        return user.zipWith(location, (userObs, locationObs) ->
+                agencies
+                        .flatMap(travelAgency -> travelAgency.rxSearch(userObs, locationObs))
+                        .first())
+                .flatMap(flight -> flight)
+                .flatMap(mTicketInteractor::rxBook);
     }
 
     public Ticket getTicket() throws ExecutionException, InterruptedException {
@@ -45,6 +63,10 @@ public class TravelInteractorFacade {
         return ticketCompletableFuture.get();
     }
 
+    private Observable<TravelAgency> agencies(int size) {
+        return Observable.fromIterable(createAgencies(size));
+    }
+
     private List<TravelAgency> createAgencies(int size) {
 
         if (size < 0) {
@@ -53,9 +75,9 @@ public class TravelInteractorFacade {
 
         final List<TravelAgency> travelAgencies = new ArrayList<>();
         for (int i = 0; i < size; i++) {
-            travelAgencies.add(new TravelAgency(size));
+            log("agency" + i + " created");
+            travelAgencies.add(new TravelAgency(size, mCompletableRxAdapter));
         }
         return travelAgencies;
     }
-
 }
