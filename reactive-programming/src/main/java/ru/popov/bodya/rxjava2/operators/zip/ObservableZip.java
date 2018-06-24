@@ -8,7 +8,7 @@ import java.util.concurrent.CountDownLatch;
 
 import static ru.popov.bodya.reactive.extensions.utils.Logger.log;
 
-public class SingleZip {
+public class ObservableZip {
 
     public static void main(String[] args) throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(1);

@@ -1,16 +1,14 @@
 package ru.popov.bodya.completable.future.domain;
 
 import io.reactivex.Observable;
-import ru.popov.bodya.completable.future.data.GeoLocation;
-import ru.popov.bodya.completable.future.data.Ticket;
-import ru.popov.bodya.completable.future.data.TravelAgency;
-import ru.popov.bodya.completable.future.data.User;
+import ru.popov.bodya.completable.future.data.*;
 import ru.popov.bodya.completable.future.data.repository.UserRepository;
 import ru.popov.bodya.completable.future.domain.interactor.LocationInteractor;
 import ru.popov.bodya.completable.future.domain.interactor.TicketInteractor;
 import ru.popov.bodya.interoperability.CompletableRxAdapter;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -42,8 +40,8 @@ public class TravelInteractorFacade {
         return user.zipWith(location, (userObs, locationObs) ->
                 agencies
                         .flatMap(travelAgency -> travelAgency.rxSearch(userObs, locationObs))
-                        .first())
-                .flatMap(flight -> flight)
+                        .first(createDefaultFlight()))
+                .flatMapSingle(flightSingle -> flightSingle)
                 .flatMap(mTicketInteractor::rxBook);
     }
 
@@ -61,6 +59,10 @@ public class TravelInteractorFacade {
                 .thenCompose(mTicketInteractor::bookAsync);
 
         return ticketCompletableFuture.get();
+    }
+
+    private Flight createDefaultFlight() {
+        return new Flight(new User("Bodya", "Popov"), new GeoLocation(0.0, 0.0), Calendar.getInstance().getTime());
     }
 
     private Observable<TravelAgency> agencies(int size) {
