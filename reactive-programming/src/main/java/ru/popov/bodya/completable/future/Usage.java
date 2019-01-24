@@ -5,7 +5,6 @@ import ru.popov.bodya.completable.future.data.repository.UserRepository;
 import ru.popov.bodya.completable.future.domain.TravelInteractorFacade;
 import ru.popov.bodya.completable.future.domain.interactor.LocationInteractor;
 import ru.popov.bodya.completable.future.domain.interactor.TicketInteractor;
-import ru.popov.bodya.interoperability.CompletableRxAdapter;
 import ru.popov.bodya.reactive.extensions.utils.Logger;
 
 import java.util.concurrent.ExecutionException;

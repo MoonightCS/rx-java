@@ -4,7 +4,7 @@ import io.reactivex.Observable;
 import org.jetbrains.annotations.Nullable;
 import ru.popov.bodya.completable.future.data.Flight;
 import ru.popov.bodya.completable.future.data.Ticket;
-import ru.popov.bodya.interoperability.CompletableRxAdapter;
+import ru.popov.bodya.completable.future.CompletableRxAdapter;
 import ru.popov.bodya.reactive.extensions.utils.Sleep;
 
 import java.util.concurrent.CompletableFuture;

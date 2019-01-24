@@ -2,7 +2,7 @@ package ru.popov.bodya.completable.future.data.repository;
 
 import io.reactivex.Observable;
 import ru.popov.bodya.completable.future.data.User;
-import ru.popov.bodya.interoperability.CompletableRxAdapter;
+import ru.popov.bodya.completable.future.CompletableRxAdapter;
 import ru.popov.bodya.reactive.extensions.utils.Logger;
 import ru.popov.bodya.reactive.extensions.utils.Sleep;
 

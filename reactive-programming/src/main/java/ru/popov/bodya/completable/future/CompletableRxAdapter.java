@@ -1,4 +1,4 @@
-package ru.popov.bodya.interoperability;
+package ru.popov.bodya.completable.future;
 
 import io.reactivex.Observable;
 

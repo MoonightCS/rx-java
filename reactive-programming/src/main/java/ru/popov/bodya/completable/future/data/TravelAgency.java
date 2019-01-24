@@ -1,7 +1,7 @@
 package ru.popov.bodya.completable.future.data;
 
 import io.reactivex.Observable;
-import ru.popov.bodya.interoperability.CompletableRxAdapter;
+import ru.popov.bodya.completable.future.CompletableRxAdapter;
 
 import java.util.Calendar;
 import java.util.concurrent.CompletableFuture;

@@ -5,7 +5,7 @@ import ru.popov.bodya.completable.future.data.*;
 import ru.popov.bodya.completable.future.data.repository.UserRepository;
 import ru.popov.bodya.completable.future.domain.interactor.LocationInteractor;
 import ru.popov.bodya.completable.future.domain.interactor.TicketInteractor;
-import ru.popov.bodya.interoperability.CompletableRxAdapter;
+import ru.popov.bodya.completable.future.CompletableRxAdapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
