@@ -1,6 +1,7 @@
 package ru.popov.bodya.rxjava2.operators.zip;
 
 import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import java.util.Random;
@@ -11,14 +12,24 @@ import static ru.popov.bodya.reactive.extensions.utils.Logger.log;
 public class ObservableZip {
 
     public static void main(String[] args) throws InterruptedException {
-        final CountDownLatch latch = new CountDownLatch(1);
-        getFinalStatus()
+        final CountDownLatch latch = new CountDownLatch(2);
+        final Disposable subscribe = getFinalStatusObservable()
+                .subscribeOn(Schedulers.io())
                 .subscribe(status -> {
                     log("final status is" + status);
                     latch.countDown();
                 });
         latch.await();
+        subscribe.dispose();
         log("main ends");
+    }
+
+    private static Observable<Status> getFinalStatusObservable() {
+        //noinspection unchecked
+        return Observable
+                .mergeArray(getGoogleStatus(), getGoogleStatus(), getEmptyStatus(), getGoogleStatus(), getGoogleStatus(), getGoogleStatus(), getGoogleStatus(),getGoogleStatus(), getSamsungStatus())
+                .doOnSubscribe(disposable -> log("onSubscribe with Final Status"))
+                .doOnNext(status -> log("on next with final status: " + status));
     }
 
     private static Observable<Status> getFinalStatus() {
@@ -37,7 +48,7 @@ public class ObservableZip {
                 .just(new Status(getValue()))
                 .doOnNext(status -> log("onSuccess with Google"))
                 .doOnSubscribe(disposable -> log("onSubscribe with Google"))
-                .subscribeOn(Schedulers.computation());
+                .subscribeOn(Schedulers.io());
     }
 
     private static Observable<Status> getSamsungStatus() {
@@ -45,7 +56,11 @@ public class ObservableZip {
                 .just(new Status(getValue()))
                 .doOnNext(status -> log("onSuccess with Samsung"))
                 .doOnSubscribe(disposable -> log("onSubscribe with Samsung"))
-                .subscribeOn(Schedulers.computation());
+                .subscribeOn(Schedulers.io());
+    }
+
+    private static Observable<Status> getEmptyStatus() {
+        return Observable.empty();
     }
 
     private static boolean getValue() {
